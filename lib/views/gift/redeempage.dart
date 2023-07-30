@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_test_2/models/history.dart';
+import 'package:flutter_test_2/models/information.dart';
 import 'package:flutter_test_2/models/product.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_test_2/views/order_page/redeem_success_page.dart';
+import 'package:shopping_cart/shopping_cart.dart';
 
 
 class RedeemPage extends StatelessWidget {
   Widget build(BuildContext context) {
-    return Scaffold(
+  final instanceHistory = ShoppingCart.getInstance<HistoryModel>();
+  final instanceInfo = ShoppingCart.getInstance<InfoModel>();
+  return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: true,
           title: Text("Redeem",
@@ -38,8 +44,21 @@ class RedeemPage extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                       child: ElevatedButton(
                         onPressed: () {
-                          // Add the action you want to perform when the button is pressed
-                          // For example, you can use Navigator to navigate to another screen.
+                          if(instanceInfo.cartItems[1].quantity < 1340) return;
+                          instanceInfo.cartItems[1].quantity-=1340;
+                          final item = HistoryModel(
+                            id : ++HistoryModel.index,
+                            price: products[index].price,
+                            quantity: 1,
+                            name: products[index].name,
+                          );
+                          instanceHistory.addItemToCart(item);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RedeemSuccessPage(),
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Color(0xFF324A59), // Set the background color

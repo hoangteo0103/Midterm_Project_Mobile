@@ -3,7 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_test_2/config/themes/text_style.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_test_2/models/history.dart';
 import 'package:flutter_test_2/models/product.dart';
+import 'package:shopping_cart/shopping_cart.dart';
+
+import '../../models/history_order.dart';
 
 class HistoryPage extends StatefulWidget {
   @override
@@ -12,6 +16,8 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
+    final instanceHistory = ShoppingCart.getInstance<HistoryModel>();
+    final instanceHistoryOrder = ShoppingCart.getInstance<HistoryOrderModel>();
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -41,14 +47,23 @@ class _HistoryPageState extends State<HistoryPage> {
         body: TabBarView(
           children: [
             ListView.builder(
-              itemCount: products.length ,
+              itemCount: instanceHistory.cartItems.length ,
               itemBuilder: (context, index) => Padding(
                 padding: const EdgeInsets.all(20),
                 child: Dismissible(
-                  key: Key(products[index].id.toString()),
+                  key: Key(instanceHistory.cartItems[index].id.toString()),
                   direction: DismissDirection.startToEnd,
                   onDismissed: (direction) {
                     setState(() {
+                      HistoryOrderModel.index++;
+                      final item = HistoryOrderModel(
+                        id : HistoryOrderModel.index,
+                        price: instanceHistory.cartItems[index].price,
+                        quantity: 1,
+                        name: instanceHistory.cartItems[index].name,
+                      );
+                      instanceHistoryOrder.addItemToCart(item);
+                      instanceHistory.cartItems.removeAt(index);
                     });
                   },
                   background: Container(
@@ -87,7 +102,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                   fontSize: 10, color: Color(0xFF324A59).withOpacity(0.6)),
                             ),
                             Text(
-                              "\$${products[index].price}",
+                              "\$${instanceHistory.cartItems[index].price}",
                               style: TextStyle(
                                   fontSize: 17, color: Color(0xff324A59),fontWeight: FontWeight.w700),
                             ),
@@ -98,7 +113,7 @@ class _HistoryPageState extends State<HistoryPage> {
                             Icon(Icons.coffee, color: Color(0xFF324A59)), // Replace with your desired icon
                             SizedBox(width: 8), // Adjust the spacing between the icon and the text
                             Text(
-                              "${products[index].name}",
+                              "${instanceHistory.cartItems[index].name}",
                               style: TextStyle(fontSize: 10, color: Color(0xFF324A59)),
                             ),
                           ],
@@ -122,7 +137,7 @@ class _HistoryPageState extends State<HistoryPage> {
               ),
             ),
             ListView.builder(
-              itemCount: products.length - 2,
+              itemCount: instanceHistoryOrder.cartItems.length,
               itemBuilder: (context, index) => Padding(
                 padding: const EdgeInsets.all(20),
                 child: Container(
@@ -148,7 +163,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                   fontSize: 10, color: Color(0xFF324A59).withOpacity(0.6)),
                             ),
                             Text(
-                              "\$${products[index].price}",
+                              "\$${instanceHistoryOrder.cartItems[index].price}",
                               style: TextStyle(
                                   fontSize: 17, color: Color(0xff324A59).withOpacity(0.6),fontWeight: FontWeight.w700),
                             ),
@@ -159,7 +174,7 @@ class _HistoryPageState extends State<HistoryPage> {
                             Icon(Icons.coffee, color: Color(0xFF324A59)), // Replace with your desired icon
                             SizedBox(width: 8), // Adjust the spacing between the icon and the text
                             Text(
-                              "${products[index].name}",
+                              "${instanceHistoryOrder.cartItems[index].name}",
                               style: TextStyle(fontSize: 10, color: Color(0xFF324A59).withOpacity(0.6)),
                             ),
                           ],

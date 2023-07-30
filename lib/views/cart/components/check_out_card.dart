@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test_2/components/default_button.dart';
 import 'package:flutter_test_2/constants/constants.dart';
 import 'package:flutter_test_2/constants/size_config.dart';
+import 'package:flutter_test_2/models/history.dart';
+import 'package:flutter_test_2/models/information.dart';
 import 'package:flutter_test_2/views/order_page/order_success_page.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:shopping_cart/shopping_cart.dart';
@@ -89,13 +93,34 @@ class _CheckoutCardState extends State<CheckoutCard> {
                       child: DefaultButton(
                         text: "Check Out",
                         press: () {
-                          if(instance.totalCartPriceInt != 0)
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => OrderSuccessPage(),
-                            ),
-                          );
+                          if(instance.totalCartPriceInt != 0) {
+                            final instanceInfo = ShoppingCart.getInstance<InfoModel>();
+                            final instanceHistory = ShoppingCart.getInstance<HistoryModel>();
+                            int totalQuantity = 0 ;
+                            String totalName = "";
+                            for(var i in instance.cartItems)
+                            {
+                              totalQuantity+= i.quantity;
+                              totalName+=" " + i.name;
+                            }
+                            instanceInfo.cartItems[1].quantity+=totalQuantity * 12 ;
+                            instanceInfo.cartItems[0].quantity = min ( 8 , instanceInfo.cartItems[0].quantity +totalQuantity);
+                            HistoryModel.index++;
+                            final item = HistoryModel(
+                                id : HistoryModel.index,
+                                price: instance.cartTotal,
+                                quantity: 1,
+                                name: totalName,
+                            );
+                            instanceHistory.addItemToCart(item);
+                            instance.clearCart();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrderSuccessPage(),
+                              ),
+                            );
+                          }
                         },
                       ),
                     ),

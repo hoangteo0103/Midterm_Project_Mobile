@@ -38,8 +38,8 @@ class _LoyaltyCardState extends State<LoyaltyCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Loyalty Card', style: TxtStyle.heading3Light2),
-                Text('5' + ' / 8',
-                    style: TxtStyle.heading3Light2)
+                Obx(() => Text('${instance.cartItems[0].quantity}' + ' / 8',
+                    style: TxtStyle.heading3Light2))
               ],
             ),
             SizedBox(height: 8),
@@ -52,7 +52,7 @@ class _LoyaltyCardState extends State<LoyaltyCard> {
                   children: [
                     for (int index = 0; index < 8; index++)
                       SvgPicture.asset(
-                        index < 5 ? 'assets/cup_blur.svg' : 'assets/cup.svg',
+                        index < instance.cartItems[0].quantity ? 'assets/cup_blur.svg' : 'assets/cup.svg',
                         height: 35,
                       ),
                   ],

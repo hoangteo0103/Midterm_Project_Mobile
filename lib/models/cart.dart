@@ -4,6 +4,7 @@ import 'package:shopping_cart/shopping_cart.dart';
 class FoodModel extends ItemModel with EquatableMixin {
   // Create all the fields of the class
   // that you need for your specific case.
+  static int index = 1 ;
   final String name;
   final String image;
 

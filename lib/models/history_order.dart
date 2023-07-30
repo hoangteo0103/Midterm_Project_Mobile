@@ -1,19 +1,24 @@
 import 'package:equatable/equatable.dart';
 import 'package:shopping_cart/shopping_cart.dart';
 
-class InfoModel extends ItemModel with EquatableMixin {
+class HistoryOrderModel extends ItemModel with EquatableMixin {
   // Create all the fields of the class
   // that you need for your specific case.
   final String name;
+  static int index = 0 ;
 
-  InfoModel({
+
+  HistoryOrderModel({
     required this.name,
+
     // this field come from ItemModel class
     required super.id,
+
     // This field come from ItemModel class
     required super.price,
+
     // This field come from ItemModel class
-    super.quantity = 0,
+    super.quantity = 1,
   });
 
 

@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test_2/config/themes/text_style.dart';
+import 'package:flutter_test_2/models/information.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shopping_cart/shopping_cart.dart';
@@ -72,6 +74,7 @@ class _PointCardState extends State<PointCard> {
 
   @override
   Widget build(BuildContext context) {
+    final instanceInfo = ShoppingCart.getInstance<InfoModel>();
     return Padding(
       padding: EdgeInsets.all(16), // Adding overall padding
       child: Container(
@@ -96,10 +99,10 @@ class _PointCardState extends State<PointCard> {
                         style: TxtStyle.heading21,
                       ),
                     ),
-                    Text(
-                      "2750",
+                    Obx( () => Text(
+                      "${instanceInfo.cartItems[1].quantity}",
                       style: TxtStyle.heading22,
-                    )
+                    ))
                   ],
                 ),
               ],

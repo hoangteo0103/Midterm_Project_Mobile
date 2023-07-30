@@ -1,5 +1,6 @@
+import 'package:flutter_test_2/models/history.dart';
+import 'package:flutter_test_2/models/history_order.dart';
 import 'package:flutter_test_2/models/information.dart';
-import 'package:flutter_test_2/views/home/homepage.dart';
 import 'package:flutter_test_2/theme.dart';
 import 'package:flutter_test_2/views/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:material_text_fields/theme/material_text_field_theme.dart';
 import 'package:shopping_cart/shopping_cart.dart';
 
 import 'models/cart.dart';
+import 'models/product.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -31,8 +33,11 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     ShoppingCart.init<FoodModel>();
     ShoppingCart.init<InfoModel>();
+    ShoppingCart.init<HistoryModel>();
+    ShoppingCart.init<HistoryOrderModel>();
 
     final instance = ShoppingCart.getInstance<InfoModel>();
+    final instanceHistoryOrder = ShoppingCart.getInstance<HistoryOrderModel>();
     var item = InfoModel(
         id : 1,
         price: 0,
@@ -43,9 +48,25 @@ class _MyAppState extends State<MyApp> {
     item = InfoModel(
       id : 2,
       price: 0,
-      quantity: 2800,
+      quantity: 2750,
       name: "point",
     );
+
+    var itemHistoryOrder = HistoryOrderModel(
+      id : ++HistoryModel.index,
+      price: products[0].price,
+      quantity: 1,
+      name: products[0].name,
+    );
+    instanceHistoryOrder.addItemToCart(itemHistoryOrder);
+    itemHistoryOrder = HistoryOrderModel(
+      id : ++HistoryModel.index,
+      price: products[3].price,
+      quantity: 1,
+      name: products[3].name,
+    );
+
+    instanceHistoryOrder.addItemToCart(itemHistoryOrder);
     instance.addItemToCart(item);
 
     return MaterialApp(
